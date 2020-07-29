@@ -8,7 +8,13 @@ fi
 REPO=$(dirname "$0")
 SRCDIR="${REPO}/src"
 OUTDIR="${REPO}/out"
-LIBDIR="${REPO}/lib/ed448goldilocks/macos-10.14.6-x64"
+LIBDIR="${REPO}/lib/ed448goldilocks/ubuntu20-x64"
+
+case "$OSTYPE" in 
+  *darwin*)
+    LIBDIR="${REPO}/lib/ed448goldilocks/macos-10.14.6-x64"
+    ;;
+esac
 
 if [ -d "${OUTDIR}" ]; then
   rm -r "${OUTDIR}"
@@ -29,3 +35,4 @@ gcc -Wall \
   -L${LIBDIR} \
   -ldecaf \
   "${SRCDIR}/ed25519_keygen.c"
+  
