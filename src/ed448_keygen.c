@@ -7,7 +7,10 @@
 #include <decaf/point_448.h>
 #include <decaf/ed448.h>
 #include <decaf/shake.h>
+#include "osrand.h"
 #include "bin2hexstr.h"
+
+#define EDDSAC_MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 int main(const int argc, const char* argv[])
 {
@@ -16,17 +19,19 @@ int main(const int argc, const char* argv[])
 
     decaf_keccak_prng_t rng; 
 
-    /* Set an initial value for the pseudo random number generator */
-    uint8_t buf[] = "bench_cfrg_crypto"; 
+    uint8_t entropy[256];
+    eddsac_dev_urandom(entropy, 128);
 
-    const size_t buflen = sizeof(buf);
+    size_t rem = 128;
+    for (int i = 1; i < argc && rem > 0; i++)
+    {
+        const char* istr = argv[i];
+        const size_t ilen = EDDSAC_MIN(rem, strlen(istr));
+        snprintf((char*)(entropy + 128 + (sizeof(entropy) - rem)), ilen, "%s", istr);
+        rem -= ilen;
+    }
 
-    decaf_spongerng_init_from_buffer( 
-      rng, /* The PRNG object. */
-      buf, /*  The initialization data. */
-      buflen, /* The length of the initialization data. */
-      1 /* Make it deterministic */
-    );
+    decaf_spongerng_init_from_buffer(rng, entropy, sizeof(entropy), 1);
 
     /* Create output buffer for the sponge-based CSPRNG. */
     uint8_t csprng_buffer[DECAF_EDDSA_448_PRIVATE_BYTES];
@@ -49,9 +54,16 @@ int main(const int argc, const char* argv[])
 
     fprintf(stdout, "{\"ed448_private_key\":\"%s\",\"ed448_public_key\":\"%s\"}\n", privatekeyhex, publickeyhex);
 
+    memset(csprng_buffer, 0x00, sizeof(csprng_buffer));
     memset(privatekeyhex, 0x00, sizeof(privatekeyhex));
     memset(publickeyhex, 0x00, sizeof(publickeyhex));
-
+    memset(privatekey, 0x00, sizeof(privatekey));
+    memset(publickey, 0x00, sizeof(publickey));
+    memset(entropy, 0x00, sizeof(entropy));
+    memset(&rng, 0x00, sizeof(rng));
+    rem = 0;
+    
     return 0;
 }
 
+#undef EDDSAC_MIN
