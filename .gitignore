@@ -1,0 +1,8 @@
+[Oo][Uu][Tt]/
+**/.DS_Store
+**/.directory
+**/Thumbs.db
+*.o
+*.obj
+*.exe
+*.bin
