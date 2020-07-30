@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ "$EUID" -eq 0 ]
-  then echo "\n    Please don't run as root/using sudo..."
+if [ "$(id -u)" = 0 ]
+  then echo "  Please don't run as root/using sudo..."
   exit
 fi
 
