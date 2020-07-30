@@ -24,42 +24,42 @@ mkdir -p ${OUTDIR}
 
 gcc -Wall \
   "${SRCDIR}/ed448_keygen.c" \
-  -o ${OUTDIR}/ed448_keygen \
+  -o "${OUTDIR}/ed448_keygen" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
 
 gcc -Wall \
   "${SRCDIR}/ed25519_keygen.c" \
-  -o ${OUTDIR}/ed25519_keygen \
+  -o "${OUTDIR}/ed25519_keygen" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
 
 gcc -Wall \
   "${SRCDIR}/ed448_sign.c" \
-  -o ${OUTDIR}/ed448_sign \
+  -o "${OUTDIR}/ed448_sign" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
 
 gcc -Wall \
   "${SRCDIR}/ed448_verify.c" \
-  -o ${OUTDIR}/ed448_verify \
+  -o "${OUTDIR}/ed448_verify" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
 
 gcc -Wall \
   "${SRCDIR}/ed25519_sign.c" \
-  -o ${OUTDIR}/ed25519_sign \
+  -o "${OUTDIR}/ed25519_sign" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
 
 gcc -Wall \
   "${SRCDIR}/ed25519_verify.c" \
-  -o ${OUTDIR}/ed25519_verify \
+  -o "${OUTDIR}/ed25519_verify" \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf
