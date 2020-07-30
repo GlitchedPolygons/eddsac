@@ -2,11 +2,8 @@
 #include <stdio.h>
 #include <decaf.h>
 #include <decaf/spongerng.h>
-#include <decaf/point_255.h>
-#include <decaf/ed255.h>
 #include <decaf/point_448.h>
 #include <decaf/ed448.h>
-#include <decaf/shake.h>
 #include "osrand.h"
 #include "bin2hexstr.h"
 
