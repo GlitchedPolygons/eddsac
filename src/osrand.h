@@ -10,6 +10,13 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 
+#ifdef _WIN32
+#define WIN32_NO_STATUS
+#include <windows.h>
+#undef WIN32_NO_STATUS
+#include <bcrypt.h>
+#endif
+
 /**
  * (Tries to) read from <c>/dev/urandom</c> (or Windows equivalent, yeah...) filling the given \p output_buffer with \p output_buffer_size random bytes.
  * @param output_buffer Where to write the random bytes into.

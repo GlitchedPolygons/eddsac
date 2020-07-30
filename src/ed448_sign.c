@@ -23,13 +23,14 @@ int main(const int argc, const char* argv[])
 
     int r = -1;
 
+    decaf_eddsa_448_keypair_s keypair;
+
     uint8_t private_key[DECAF_EDDSA_448_PRIVATE_BYTES + 1];
-    uint8_t public_key[DECAF_EDDSA_448_PUBLIC_BYTES];
     uint8_t signature[DECAF_EDDSA_448_SIGNATURE_BYTES]; 
 
     uint8_t* ctx = NULL; 
-    size_t ctx_size = 0;
-
+    uint8_t ctx_size = 0;
+    
     const char* private_key_hexstr = argv[1];
     const size_t private_key_hexstr_length = strlen(private_key_hexstr);
 
@@ -50,22 +51,13 @@ int main(const int argc, const char* argv[])
         goto exit;
     }
 
-    decaf_ed448_derive_public_key(public_key, private_key); 
+    decaf_ed448_derive_keypair(&keypair, private_key);
 
-    decaf_ed448_sign( 
-        signature,
-        private_key,
-        public_key,
-        (uint8_t*)message,
-        message_length,
-        0, /* prehash (a.k.a ed448_ph): 0=false. non-zero=true. */
-        ctx,
-        ctx_size
-    );
+    decaf_ed448_keypair_sign(signature, &keypair, (uint8_t*)message, message_length, 0, ctx, ctx_size);
 
     decaf_error_t verification_status = decaf_ed448_verify(   
         signature, 
-        public_key, 
+        keypair.pubkey, 
         (uint8_t*)message, 
         message_length, 
         0,
@@ -88,8 +80,8 @@ int main(const int argc, const char* argv[])
     r = 0;
 
 exit:
+    memset(&keypair, 0x00, sizeof(keypair));
     memset(signature, 0x00, sizeof(signature));
-    memset(public_key, 0x00, sizeof(public_key));
     memset(private_key, 0x00, sizeof(private_key));
     
     return (r);

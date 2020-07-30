@@ -22,12 +22,13 @@ int main(const int argc, const char* argv[])
 
     int r = -1;
 
-    uint8_t private_key[DECAF_EDDSA_25519_PRIVATE_BYTES + 1];
-    uint8_t public_key[DECAF_EDDSA_25519_PUBLIC_BYTES];
-    uint8_t signature[DECAF_EDDSA_25519_SIGNATURE_BYTES]; 
+    decaf_eddsa_25519_keypair_s keypair;
 
-    uint8_t* ctx = NULL; 
-    size_t ctx_size = 0;
+    uint8_t private_key[DECAF_EDDSA_25519_PRIVATE_BYTES + 1];
+    uint8_t signature[DECAF_EDDSA_25519_SIGNATURE_BYTES];
+
+    uint8_t* ctx = NULL;
+    uint8_t ctx_size = 0;
 
     const char* private_key_hexstr = argv[1];
     const size_t private_key_hexstr_length = strlen(private_key_hexstr);
@@ -49,22 +50,13 @@ int main(const int argc, const char* argv[])
         goto exit;
     }
 
-    decaf_ed25519_derive_public_key(public_key, private_key); 
+    decaf_ed25519_derive_keypair(&keypair, private_key);
 
-    decaf_ed25519_sign( 
-        signature,
-        private_key,
-        public_key,
-        (uint8_t*)message,
-        message_length,
-        0, /* Prehash (set this to non-zero if what you're signing already is the hash of something) */
-        ctx,
-        ctx_size
-    );
+    decaf_ed25519_keypair_sign(signature, &keypair, (uint8_t*)message, message_length, 0, ctx, ctx_size);
 
     decaf_error_t verification_status = decaf_ed25519_verify(   
         signature, 
-        public_key, 
+        keypair.pubkey, 
         (uint8_t*)message, 
         message_length, 
         0,
@@ -87,8 +79,8 @@ int main(const int argc, const char* argv[])
     r = 0;
 
 exit:
+    memset(&keypair, 0x00, sizeof(keypair));
     memset(signature, 0x00, sizeof(signature));
-    memset(public_key, 0x00, sizeof(public_key));
     memset(private_key, 0x00, sizeof(private_key));
     
     return (r);

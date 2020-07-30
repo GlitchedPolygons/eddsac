@@ -28,7 +28,7 @@ int main(const int argc, const char* argv[])
     uint8_t signature[DECAF_EDDSA_448_SIGNATURE_BYTES + 1]; 
 
     uint8_t* ctx = NULL; 
-    size_t ctx_size = 0;
+    uint8_t ctx_size = 0;
 
     const char* public_key_hexstr = argv[1];
     const size_t public_key_hexstr_length = strlen(public_key_hexstr);
