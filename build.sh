@@ -49,3 +49,17 @@ gcc -Wall \
   -L${LIBDIR} \
   -ldecaf \
   "${SRCDIR}/ed448_verify.c"
+
+gcc -Wall \
+  -o ${OUTDIR}/ed25519_sign \
+  -I${LIBDIR}/include \
+  -L${LIBDIR} \
+  -ldecaf \
+  "${SRCDIR}/ed25519_sign.c"
+
+gcc -Wall \
+  -o ${OUTDIR}/ed25519_verify \
+  -I${LIBDIR}/include \
+  -L${LIBDIR} \
+  -ldecaf \
+  "${SRCDIR}/ed25519_verify.c"
