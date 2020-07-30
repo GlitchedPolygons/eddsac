@@ -35,10 +35,17 @@ gcc -Wall \
   -L${LIBDIR} \
   -ldecaf \
   "${SRCDIR}/ed25519_keygen.c"
-  
-  gcc -Wall \
+
+gcc -Wall \
   -o ${OUTDIR}/ed448_sign \
   -I${LIBDIR}/include \
   -L${LIBDIR} \
   -ldecaf \
   "${SRCDIR}/ed448_sign.c"
+
+gcc -Wall \
+  -o ${OUTDIR}/ed448_verify \
+  -I${LIBDIR}/include \
+  -L${LIBDIR} \
+  -ldecaf \
+  "${SRCDIR}/ed448_verify.c"
